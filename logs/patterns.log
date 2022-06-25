@@ -1,0 +1,34 @@
+'WithCTE
+:- 'CTERelationDef 0
+:  +- 'SubqueryAlias cte
+:     +- 'Project ['s.customer_id AS customer_id#61, 'c.loyalty_score AS loyalty_score#62, 'p.product_id AS product_id#63, 'p.product_category AS product_category#64]
+:        +- 'Join Inner, ('s.basket_product_id = product_id#54)
+:           :- Join Inner, (customer_id#8 = customer_id#34)
+:           :  :- SubqueryAlias s
+:           :  :  +- SubqueryAlias shoping
+:           :  :     +- View (`shoping`, [basket#14,customer_id#8,date_of_purchase#9])
+:           :  :        +- Project [basket#14, customer_id#8, date_of_purchase#9]
+:           :  :           +- Generate explode(basket#7), false, [basket#14]
+:           :  :              +- Relation [basket#7,customer_id#8,date_of_purchase#9] json
+:           :  +- SubqueryAlias c
+:           :     +- SubqueryAlias customers
+:           :        +- View (`customers`, [customer_id#34,loyalty_score#35])
+:           :           +- Relation [customer_id#34,loyalty_score#35] csv
+:           +- SubqueryAlias p
+:              +- SubqueryAlias products
+:                 +- View (`products`, [product_id#54,product_description#55,product_category#56])
+:                    +- Relation [product_id#54,product_description#55,product_category#56] csv
+:- 'CTERelationDef 1
+:  +- 'SubqueryAlias sum_cte
+:     +- 'Aggregate ['customer_id], ['customer_id, 'COUNT('product_id) AS purchase_count#65]
+:        +- 'SubqueryAlias cte
+:           +- 'CTERelationRef 0, false
++- 'Sort ['customer_id ASC NULLS FIRST], true
+   +- 'Project ['c.customer_id AS customer_id#60, 'loyalty_score, 'product_id, 'product_category, 'purchase_count]
+      +- 'Join Inner, ('c.customer_id = 'sc.customer_id)
+         :- 'SubqueryAlias c
+         :  +- 'SubqueryAlias cte
+         :     +- 'CTERelationRef 0, false
+         +- 'SubqueryAlias sc
+            +- 'SubqueryAlias sum_cte
+               +- 'CTERelationRef 1, false

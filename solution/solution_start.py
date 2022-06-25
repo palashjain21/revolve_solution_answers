@@ -1,5 +1,8 @@
+from main import ShoppingPatternApp
 import argparse
 
+from pyspark.sql import SparkSession
+from pyspark import SparkConf
 
 
 def get_params() -> dict:
@@ -11,10 +14,16 @@ def get_params() -> dict:
     return vars(parser.parse_args())
 
 
-
 def main():
+    spark_conf = SparkConf()
+    spark_conf.set("spark.app.name", "DataFrameRunTimeErrorExample")
+    spark_conf.set("spark.master", "local[2]")
+    spark = SparkSession.builder.config(conf=spark_conf).getOrCreate()
+
     params = get_params()
-    
+    shop_obj = ShoppingPatternApp(params)
+    shop_obj.run(spark)
+
 
 if __name__ == "__main__":
     main()
