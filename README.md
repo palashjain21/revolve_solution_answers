@@ -1,5 +1,12 @@
 # Revolve Solutions Data Test - Starter Project
 
+###Solution:
+> Solution code is inside revolvespl/solution/solution_start.py
+> ![img.png](img.png)
+> Finally added an airflow DAG which will run weekly to generate data inside revolve_dag.py
+>![img_1.png](img_1.png)
+cd revolvespl/
+python3 solution/solution_start.py
 ### Prerequisites
 #### Java JDK 8
 >
